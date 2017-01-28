@@ -1,11 +1,6 @@
 import fetch from 'isomorphic-fetch';
-import {LogAPICallEvent, LogAPIResultEvent} from "./GoogleAnalytics";
 
-let url_base;
-
-export const TESTING_URL = "https://api.github.com/repos/vmg/redcarpet/issues?state=closed";
-
-export const APIUrlBase = url_base;
+// let url_base = "https://www.quora.com/api/logged_in_user";
 
 export const serializeGet = (obj, prefix) => {
   var str = [];
@@ -23,8 +18,8 @@ export const serializeGet = (obj, prefix) => {
 };
 
 // Internal Helper
-export const sendAPIRequest = (method = "POST", data = null, token = null) => {
-  var RequestData = {
+export const sendAPIRequest = (method = "GET") => {
+  return {
     method: method,
     headers: {
       client: "{\"platform\": \"Web\"}",
@@ -33,100 +28,12 @@ export const sendAPIRequest = (method = "POST", data = null, token = null) => {
     },
     dataType: "json"
   };
-
-  if (token !== null) {
-    RequestData.headers.Authorization = "JWT " + token;
-  }
-
-  if (data !== null && method.toLowerCase() !== "get" && method.toLowerCase() !== "head") {
-    RequestData.body = JSON.stringify(data);
-  }
-
-  return RequestData;
 };
 
-export const PostAPI = (URL, data, token = null) => {
-  LogAPICallEvent("Post", URL);
-  return fetch(url_base + URL, sendAPIRequest("POST", data, token))
-    .then(
-      res => {
-        LogAPIResultEvent("Post", URL, res.status);
-        if (res.status === 401) {
-          location.reload();
-        } else if (res.status >= 400) {
-          return res.json();
-        } else {
-          return res.json();
-        }
-      },
-      err => {
-        throw Error("(POST) API Returned Malformed JSON"); //";
-      }
-    );
-};
 
-export const PatchAPI = (URL, data = null, token = null) => {
-  LogAPICallEvent("Patch", URL);
-  return fetch(url_base + URL, sendAPIRequest("PATCH", data, token)).then(
+export const GetAPI = (URL) => {
+  return fetch(URL, sendAPIRequest()).then(
     res => {
-      LogAPIResultEvent("Patch", URL, res.status);
-      if (res.status === 401) {
-        location.reload();
-      } else if (res.status >= 400) {
-        return res.json();
-      } else {
-        return res.json();
-      }
-    },
-    err => {
-      throw Error("(PATCH) API Returned Malformed JSON");
-    }
-  );
-};
-
-export const PutAPI = (URL, data, token = null) => {
-  LogAPICallEvent("Put", URL);
-  return fetch(url_base + URL, sendAPIRequest("PUT", data, token)).then(
-    res => {
-      LogAPIResultEvent("Put", URL, res.status);
-      if (res.status === 401) {
-        location.reload();
-      } else if (res.status >= 400) {
-        return res.json();
-      } else {
-        return res.json();
-      }
-    },
-    err => {
-      throw Error("(PUT) API Returned Malformed JSON");
-    }
-  );
-};
-
-export const GetPureAPI = (URL, token = null) => {
-  LogAPICallEvent("Get", URL);
-  return fetch(url_base + URL, sendAPIRequest("GET", null, token)).then(
-    res => {
-      LogAPIResultEvent("Get", URL, res.status);
-      if (res.status === 401) {
-        location.reload();
-      } else if (res.status >= 400) {
-        return res.json();
-      } else {
-        return res.json();
-      }
-    },
-    err => {
-      throw Error("API Returned Malformed JSON");
-    }
-  );
-};
-
-export const GetAPI = (URL, token = null, data = null) => {
-  LogAPICallEvent("Get", URL);
-  return fetch(url_base + URL + "?" + serializeGet(data), sendAPIRequest("GET", null, token)).then(
-    res => {
-      LogAPIResultEvent("Get", URL, res.status);
       if (res.status === 401) {
         location.reload();
       } else if (res.status >= 400) {
@@ -141,22 +48,4 @@ export const GetAPI = (URL, token = null, data = null) => {
   );
 };
 
-export const DeleteAPI = (URL, token = null, data = null) => {
-  LogAPICallEvent("Delete", URL);
-  return fetch(url_base + URL, sendAPIRequest("DELETE", data, token)).then(
-    res => {
-      LogAPIResultEvent("Delete", URL, res.status);
-      if (res.status === 401) {
-        location.reload();
-      } else if (res.status >= 400) {
-        return res.json();
-      } else {
-        return res.json();
-      }
-    },
-    err => {
-      throw Error("API Returned Malformed JSON");
-    }
-  );
-};
 

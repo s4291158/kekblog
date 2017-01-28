@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
+// import {GetAPI} from '../API';
+
 
 class Content extends Component {
+  // getFeed() {
+  //   GetAPI("http://localhost:8000/")
+  // }
+  //
+  // componentDidMount() {
+  //   console.log(this.getFeed())
+  // }
+
   render() {
     return (
       <div className="Content">
