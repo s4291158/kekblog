@@ -7,11 +7,18 @@ import injectTapEventPlugin from "react-tap-event-plugin";
 
 injectTapEventPlugin();
 
+const style = {
+  content: {
+    background: "#fafafa",
+    paddingTop: 64
+  }
+};
+
 ReactDOM.render(
   (
     <div>
       <div id="nav"/>
-      <div id="content"/>
+      <div id="content" style={style.content}/>
     </div>
   ),
   document.getElementById('root')
