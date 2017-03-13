@@ -24,19 +24,25 @@ const style = {
 }
 
 class Stats extends Component {
+  state = {
+    current_views: undefined,
+    total_views: undefined,
+    total_likes: undefined,
+    total_shares: undefined
+  }
   componentDidMount () {
     this.ref = db.ref(FIREBASE_URL)
     this.ref.on('value', this.handleValue)
   }
   handleValue (snapshot) {
     const data = snapshot.val()
-    alert(data)
-    // if (data) this.setState({ data: fromJS(camelize(data)) })
+    this.setState(data)
   }
   componentWillUnmount () {
     this.ref.off('value', this.handleValue)
   }
   render() {
+    const {current_views, total_views, total_likes, total_shares} = this.state
     return (
       <div style={style.stats}>
         <div>
@@ -46,7 +52,7 @@ class Stats extends Component {
             />
           </MuiThemeProvider>
           <span>
-            <span>314 currently viewing</span>
+            <span>{current_views ? `${current_views} currently viewing` : 'No Active Viewers'} </span>
           </span>
         </div>
         <div>
@@ -56,7 +62,7 @@ class Stats extends Component {
             />
           </MuiThemeProvider>
           <span>
-            <span>74,123 total views</span>
+            <span>{total_views} total views</span>
           </span>
         </div>
         <div>
@@ -66,7 +72,7 @@ class Stats extends Component {
             />
           </MuiThemeProvider>
           <span>
-            <span>4,501 total likes</span>
+            <span>{total_likes} total likes</span>
           </span>
         </div>
         <div>
@@ -76,7 +82,7 @@ class Stats extends Component {
             />
           </MuiThemeProvider>
           <span>
-            <span>216 total shares</span>
+            <span>{total_shares} total shares</span>
           </span>
         </div>
       </div>
